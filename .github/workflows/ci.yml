@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install ruff
-          pip install -r requirements.txt
+          pip install -e .
       - name: Check formatting with Ruff
         run: ruff format --check .
       - name: Lint with Ruff
