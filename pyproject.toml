@@ -36,3 +36,4 @@ skip-magic-trailing-comma = true
 
 [tool.pytest.ini_options]
 addopts = ["--import-mode=importlib"]
+filterwarnings = ["error", "ignore::DeprecationWarning:botocore"]
