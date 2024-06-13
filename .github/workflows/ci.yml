@@ -22,12 +22,14 @@ jobs:
           cache: pip
       - name: Install dependencies
         run: |
-          pip install ruff
+          pip install ruff pytest
           pip install -e .
       - name: Check formatting with Ruff
         run: ruff format --check .
       - name: Lint with Ruff
         run: ruff check .
+      - name: Test with pytest
+        run: pytest
   publish:
     name: Build and publish package
     needs: test
