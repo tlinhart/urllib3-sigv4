@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+import inspect
 import re
+import sys
 from typing import Any, Mapping, NamedTuple
 from unittest.mock import patch
 
 import pytest
-from urllib3 import HTTPResponse
+import urllib3
 
 from urllib3_sigv4 import PoolManager, SigV4RequestSigner, request
 
@@ -83,11 +85,37 @@ def pool_with_signer(signer: SigV4RequestSigner) -> PoolManager:
 
 
 class TestPoolManager:
+    @pytest.mark.skipif(
+        sys.version_info < (3, 10), reason="requires Python 3.10 or newer"
+    )
+    def test_constructor_signature(self) -> None:
+        """Check constructor signature matches that of urllib3.PoolManager."""
+        sig_orig = inspect.signature(urllib3.PoolManager, eval_str=True)
+        sig = inspect.signature(PoolManager, eval_str=True)
+        params_orig = dict(sig_orig.parameters)
+        params = dict(sig.parameters)
+        params.pop("signer")
+        assert params_orig == params
+
+    @pytest.mark.skipif(
+        sys.version_info < (3, 10), reason="requires Python 3.10 or newer"
+    )
+    def test_request_signature(self) -> None:
+        """Check request() signature matches that of urllib3.PoolManager."""
+        sig_orig = inspect.signature(
+            urllib3.PoolManager.request, eval_str=True
+        )
+        sig = inspect.signature(PoolManager.request, eval_str=True)
+        params_orig = dict(sig_orig.parameters)
+        params = dict(sig.parameters)
+        params.pop("signer")
+        assert params_orig == params
+
     def test_not_signed(self, pool: PoolManager) -> None:
         """Check requests are not signed by default."""
         with patch(
             "urllib3.connectionpool.HTTPConnectionPool.urlopen",
-            return_value=HTTPResponse(),
+            return_value=urllib3.HTTPResponse(),
         ) as urlopen:
             pool.request(
                 "GET",
@@ -101,7 +129,7 @@ class TestPoolManager:
         """Check requests are signed by default if pool created with signer."""
         with patch(
             "urllib3.connectionpool.HTTPConnectionPool.urlopen",
-            return_value=HTTPResponse(),
+            return_value=urllib3.HTTPResponse(),
         ) as urlopen:
             pool_with_signer.request(
                 "GET",
@@ -118,7 +146,7 @@ class TestPoolManager:
         """Check individual request is signed with provided signer."""
         with patch(
             "urllib3.connectionpool.HTTPConnectionPool.urlopen",
-            return_value=HTTPResponse(),
+            return_value=urllib3.HTTPResponse(),
         ) as urlopen:
             pool.request(
                 "GET",
@@ -136,7 +164,7 @@ class TestPoolManager:
         """Check request signer takes precedence over pool signer."""
         with patch(
             "urllib3.connectionpool.HTTPConnectionPool.urlopen",
-            return_value=HTTPResponse(),
+            return_value=urllib3.HTTPResponse(),
         ) as urlopen:
             pool_with_signer.request(
                 "GET",
@@ -153,11 +181,23 @@ class TestPoolManager:
 
 
 class TestRequest:
+    @pytest.mark.skipif(
+        sys.version_info < (3, 10), reason="requires Python 3.10 or newer"
+    )
+    def test_signature(self) -> None:
+        """Check signature matches that of urllib3.request()."""
+        sig_orig = inspect.signature(urllib3.request, eval_str=True)
+        sig = inspect.signature(request, eval_str=True)
+        params_orig = dict(sig_orig.parameters)
+        params = dict(sig.parameters)
+        params.pop("signer")
+        assert params_orig == params
+
     def test_not_signed(self) -> None:
         """Check request is not signed by default."""
         with patch(
             "urllib3.connectionpool.HTTPConnectionPool.urlopen",
-            return_value=HTTPResponse(),
+            return_value=urllib3.HTTPResponse(),
         ) as urlopen:
             request(
                 "GET",
@@ -171,7 +211,7 @@ class TestRequest:
         """Check request is signed with provided signer."""
         with patch(
             "urllib3.connectionpool.HTTPConnectionPool.urlopen",
-            return_value=HTTPResponse(),
+            return_value=urllib3.HTTPResponse(),
         ) as urlopen:
             request(
                 "GET",
