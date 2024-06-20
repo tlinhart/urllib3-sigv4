@@ -1,6 +1,6 @@
 [project]
 name = "urllib3_sigv4"
-version = "0.2.0"
+version = "0.3.0"
 description = "Extension to urllib3 adding support for AWS Signature Version 4"
 readme = "README.md"
 keywords = ["urllib", "aws", "sigv4"]
