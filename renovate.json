@@ -1,0 +1,17 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    "schedule:weekly",
+    ":enablePreCommit",
+    "group:allNonMajor",
+    ":automergeAll"
+  ],
+  "packageRules": [
+    {
+      "matchManagers": ["pep621"],
+      "matchDepTypes": ["project.dependencies"],
+      "rangeStrategy": "widen"
+    }
+  ]
+}
