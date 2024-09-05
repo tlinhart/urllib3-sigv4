@@ -27,7 +27,7 @@ class SigV4RequestSigner(SigV4Auth):
         region: str | None = None,
         access_key: str | None = None,
         secret_key: str | None = None,
-    ):
+    ) -> None:
         session = boto3._get_default_session()
         region = session.region_name if region is None else region
         if region is None:
@@ -87,7 +87,7 @@ class PoolManager(urllib3.PoolManager):
             **urlopen_kw,
         )
 
-    def urlopen(
+    def urlopen(  # type: ignore[override]
         self, method: str, url: str, redirect: bool = True, **kw: Any
     ) -> BaseHTTPResponse:
         # Sign the request if required before making the actual HTTP request.
