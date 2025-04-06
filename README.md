@@ -7,10 +7,16 @@ and the actual signing process.
 
 ## Installation
 
-Use `pip` to install the package:
+To install the package, use either `pip`:
 
 ```bash
 pip install urllib3_sigv4
+```
+
+or `uv`:
+
+```bash
+uv add urllib3_sigv4
 ```
 
 ## Usage
