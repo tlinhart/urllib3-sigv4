@@ -39,7 +39,7 @@ signer = SigV4RequestSigner(
     "lambda",
     region="eu-central-1",
     access_key="AKIAIOSFODNN7EXAMPLE",
-    secret_key="wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+    secret_key="wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
 )
 ```
 
@@ -65,7 +65,7 @@ http = PoolManager(signer=signer)
 response = http.request(
     "POST",
     "https://my-lambda-url-id.lambda-url.eu-central-1.on.aws",
-    json={"name": "John Doe", "age": 30}
+    json={"name": "John Doe", "age": 30},
 )
 print(response.json())
 ```
@@ -88,7 +88,7 @@ response = http.request(
     "POST",
     "https://my-lambda-url-id.lambda-url.eu-central-1.on.aws",
     json={"name": "John Doe", "age": 30},
-    signer=signer
+    signer=signer,
 )
 print(response.json())
 ```
@@ -105,7 +105,7 @@ response = request(
     "POST",
     "https://my-lambda-url-id.lambda-url.eu-central-1.on.aws",
     json={"name": "John Doe", "age": 30},
-    signer=signer
+    signer=signer,
 )
 print(response.json())
 ```
